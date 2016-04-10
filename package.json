@@ -10,6 +10,13 @@
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "^2.11.2",
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-uglify": "^1.5.3"
+  },
+  "dependencies": {
+    "d3": "^3.5.16",
+    "d3-random": "^0.2.1"
   }
 }
