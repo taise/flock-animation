@@ -11,27 +11,42 @@ space.style("height", sideSize)
 
 
 function createCircle(space, elements) {
-  space.selectAll('circle')
-  .data(elements)
-  .enter()
-  .append('circle')
-  .attr({
-      'name': function(d) { return d[0]; },
-      'cx':   function(d) { return d[1]; },
-      'cy':   function(d) { return d[2]; },
-      'r':    function(d) { return d[3]; },
-      'fill': function(d) { return d[4]; }
-  });
+  return space.selectAll('circle')
+              .data(elements)
+              .enter()
+              .append('circle')
+              .attr({
+                  'class': 'fish',
+                  'name': function(d) { return d[0]; },
+                  'cx':   function(d) { return d[1]; },
+                  'cy':   function(d) { return d[2]; },
+                  'r':    function(d) { return d[3]; },
+                  'fill': function(d) { return d[4]; }
+              });
 }
-
 
 var elements = [];
 d3.range(50).forEach(function(d) {
     elements.push([d, random(), random(), circleSize, color]);
 });
 
-createCircle(space, elements);
 
-var circles = space.selectAll("circle")
-                   .data(elements)
 
+var circles = createCircle(space, elements);
+
+
+
+function swim() {
+  var plusX = random() * 0.35;
+  var plusY = random() * 0.35;
+
+  d3.selectAll(".fish").transition()
+         .delay(100)
+         .duration(function(d) { return d[1]*10; })
+         .ease("cubic-out")
+         .attr("cx", function(d) { return d[1] + plusX - 20 * Math.random(); })
+         .attr("cy", function(d) { return d[2] + plusY - 20 * Math.random(); });
+  console.log(plusX, plusY)
+}
+
+setInterval(swim, 2000);
