@@ -26,27 +26,35 @@ function createCircle(space, elements) {
 }
 
 var elements = [];
-d3.range(50).forEach(function(d) {
-    elements.push([d, random(), random(), circleSize, color]);
+d3.range(200).forEach(function(d) {
+    elements.push([d, random(), random(), Math.log(random()), color]);
 });
 
 
 
 var circles = createCircle(space, elements);
 
+var moveTo = function(sideSize) {
+  // sideSize / 10 = (|rx| + |ry| + |rz|) / denomi
+  var rx = Math.random(Math.random()) * 2 - 1;
+  var ry = Math.random(Math.random()) * 2 - 1;
+  var rz = Math.random(Math.random()) * 2 - 1;
+  var denomi = 10 * (Math.abs(rx) + Math.abs(ry) + Math.abs(rz)) / sideSize
+  return [rx, ry, rz].map(function(d) { return d / denomi})
+}
 
-
-function swim() {
-  var plusX = random() * 0.35;
-  var plusY = random() * 0.35;
+function swim(sideSize) {
+  var positions = moveTo(sideSize);
+  // positionとcolorをひも付け
 
   d3.selectAll(".fish").transition()
-         .delay(100)
-         .duration(function(d) { return d[1]*10; })
+         .delay(50)
+         .duration(function(d) { return d[1]*5; })
          .ease("cubic-out")
-         .attr("cx", function(d) { return d[1] + plusX - 20 * Math.random(); })
-         .attr("cy", function(d) { return d[2] + plusY - 20 * Math.random(); });
+         .attr("cx", function(d) { return d[1] + positions[0]; })
+         .attr("cy", function(d) { return d[2] + positions[1]; })
+         .attr("r",  function(d) { return d[3] + positions[2] * 0.05; });
   console.log(plusX, plusY)
 }
 
-setInterval(swim, 2000);
+setInterval(function() { swim(sideSize); }, 1000);
